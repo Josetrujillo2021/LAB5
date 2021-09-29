@@ -34,7 +34,6 @@
 //Prototipos de funciones
 //----------------------------------------------------------------------------------------------------------------------
 void LectorVoltajes(void);
-void PWMLEDS(V1, V2); 
 void configurarPWM(void); 
 //---------------------------------------------------------------------------------------------------------------------
 //Variables Globales
@@ -44,9 +43,6 @@ void configurarPWM(void);
 int V1 = 0; 
 int V2 = 0; 
 
-//Creación de variables de comvierten el dato de Analógico a digital
-int LR = 0; 
-int LV = 0; 
 
 int contador = 0; 
 LiquidCrystal LCD(RS, E, D4, D5, D6, D7);
@@ -56,6 +52,8 @@ LiquidCrystal LCD(RS, E, D4, D5, D6, D7);
 int DutyCicleLR = 0; //dutycicle del led ROJO
 int DutyCicleLV = 0; //dutycicle del led VERDE
 int DutyCicleLA = 0; //dutycicle del led AZUL
+
+int contador = 0; 
 
 //----------------------------------------------------------------------------------------------------------------------
 //ISR  (interrupciones)
@@ -89,8 +87,27 @@ void setup() {
 //---------------------------------------------------------------------------------------------------------------------
 void loop() {
   LectorVoltajes();
-  PWMLEDS(V1, V2);
   
+  LCD.clear(); //limpia la LCD
+  LCD.print("Rojo:"); //IMPRIMER EN LA LCD
+  LCD.print(" "); 
+
+  LCD.print("Verde:");
+  LCD.print(" ");
+
+  LCD.print("Azul:");
+  LCD.setCursor(1, 1);
+  
+  LCD.print(V1);
+  LCD.print(" ");
+
+  LCD.print(V2);
+  LCD.print(" ");
+
+  LCD.print(contador);
+
+
+
   }
 //---------------------------------------------------------------------------------------------------------------------
 //Lector analogico de voltajes
@@ -101,7 +118,11 @@ void LectorVoltajes(void){
   
   V1 = map(V1, 0,1023, 0, 255);
   V2 = map(V2, 0, 1023, 0, 255); 
-  }
+
+  ledcWrite(LRChannel, V1);
+  ledcWrite(LVChannel, V2);
+
+}
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -119,11 +140,4 @@ void configurarPWM(void){
 
   ledcSetup (LAChannel, freq, resolucion); 
   ledcAttachPin(LA, LAChannel);
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-//PWM LEDS
-//---------------------------------------------------------------------------------------------------------------------
-void PWMLEDS(int x, int y){
-
 }
