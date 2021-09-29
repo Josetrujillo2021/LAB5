@@ -35,6 +35,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 void LectorVoltajes(void);
 void configurarPWM(void); 
+void Contador(void);
 //---------------------------------------------------------------------------------------------------------------------
 //Variables Globales
 //----------------------------------------------------------------------------------------------------------------------
@@ -55,6 +56,7 @@ int DutyCicleLA = 0; //dutycicle del led AZUL
 
 int contador = 0; 
 
+String Mensaje = ""; 
 //----------------------------------------------------------------------------------------------------------------------
 //ISR  (interrupciones)
 //----------------------------------------------------------------------------------------------------------------------
@@ -87,7 +89,8 @@ void setup() {
 //---------------------------------------------------------------------------------------------------------------------
 void loop() {
   LectorVoltajes();
-  
+  Contador(); 
+
   LCD.clear(); //limpia la LCD
   LCD.print("Rojo:"); //IMPRIMER EN LA LCD
   LCD.print(" "); 
@@ -105,6 +108,7 @@ void loop() {
   LCD.print(" ");
 
   LCD.print(contador);
+  delay(250); 
 
 
 
@@ -122,6 +126,12 @@ void LectorVoltajes(void){
   ledcWrite(LRChannel, V1);
   ledcWrite(LVChannel, V2);
 
+  //Comunicación con el monitor 
+  Serial.print("Pot1: ");
+  Serial.print(V1);
+  Serial.print('\n');
+  Serial.print("Pot2: ");  
+  Serial.println(V2);
 }
 
 
@@ -140,4 +150,27 @@ void configurarPWM(void){
 
   ledcSetup (LAChannel, freq, resolucion); 
   ledcAttachPin(LA, LAChannel);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//FUNCIÓN PARA CONTADOR
+//----------------------------------------------------------------------------------------------------------------------4
+void Contador(void){
+ if(Mensaje =="+"){
+    Serial.print("Recibi el siguiente mensaje: ")
+    Serial.println(Mensaje);
+    contador++; 
+
+    Serial.print("Contador: ");
+    Serial.print(contador);
+ }
+
+ if (Mensaje == "-"){
+    Serial.print("Recibi el siguiente mensaje: ")
+    Serial.println(Mensaje);
+    contador--; 
+
+    Serial.print("Contador: ");
+    Serial.print(contador);
+ }
 }
