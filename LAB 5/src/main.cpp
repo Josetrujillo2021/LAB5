@@ -57,6 +57,13 @@ int DutyCicleLA = 0; //dutycicle del led AZUL
 int contador = 0; 
 
 String Mensaje = ""; 
+
+//Variables de tiempo
+int sampleTime1 = 250;
+long LastTime; 
+
+int sampleTime2= 500; 
+long LastTime2; 
 //----------------------------------------------------------------------------------------------------------------------
 //ISR  (interrupciones)
 //----------------------------------------------------------------------------------------------------------------------
@@ -79,7 +86,10 @@ void setup() {
   digitalWrite(LV, LOW);
   digitalWrite(LA, LOW);
   
-  analogResolution(resolucion);
+  //analogResolution(resolucion);
+
+  LastTime=millis();
+  LastTime2 = millis(); 
    
 }
 
@@ -88,27 +98,33 @@ void setup() {
 //Loop principal
 //---------------------------------------------------------------------------------------------------------------------
 void loop() {
-  LectorVoltajes();
+  if (millis() - LastTime2 >= sampleTime2){
+    LectorVoltajes();
+    LastTime2 = millis();
+  }
+
   Contador(); 
-
-  LCD.clear(); //limpia la LCD
-  LCD.print("Rojo:"); //IMPRIMER EN LA LCD
-  LCD.print(" "); 
-
-  LCD.print("Verde:");
-  LCD.print(" ");
-
-  LCD.print("Azul:");
-  LCD.setCursor(1, 1);
   
-  LCD.print(V1);
-  LCD.print(" ");
+  if (millis() - LastTime >= sampleTime1){
+    LCD.clear(); //limpia la LCD
+    LCD.print("Rojo:"); //IMPRIMER EN LA LCD
+    LCD.print(" "); 
 
-  LCD.print(V2);
-  LCD.print(" ");
+    LCD.print("Verde:");
+    LCD.print(" ");
 
-  LCD.print(contador);
-  delay(250); 
+    LCD.print("Azul:");
+    LCD.setCursor(1, 1);
+    
+    LCD.print(V1);
+    LCD.print(" ");
+
+    LCD.print(V2);
+    LCD.print(" ");
+
+    LCD.print(contador);
+    LastTime= millis(); 
+  } 
 
 
 
@@ -117,7 +133,7 @@ void loop() {
 //Lector analogico de voltajes
 //---------------------------------------------------------------------------------------------------------------------
 void LectorVoltajes(void){
-  V1 = analogReadMillivolts(Voltaje1);
+  V1 = analogReadMilliVolts(Voltaje1);
   V2 = analogReadMilliVolts(Voltaje2);
   
   V1 = map(V1, 0,1023, 0, 255);
@@ -158,7 +174,7 @@ void configurarPWM(void){
 void Contador(void){
   //si mi entrada es un + entonces mi contador aumenta una unidad
  if(Mensaje =="+"){
-    Serial.print("Recibi el siguiente mensaje: ")
+    Serial.print("Recibi el siguiente mensaje: ");
     Serial.println(Mensaje);
     if (contador<255){
       contador++;
@@ -174,7 +190,7 @@ void Contador(void){
  }
 //si mi entrada es un + entonces mi contador disminuye una unidad
  if (Mensaje == "-"){
-    Serial.print("Recibi el siguiente mensaje: ")
+    Serial.print("Recibi el siguiente mensaje: ");
     Serial.println(Mensaje);
     if (contador>0){
       contador--;
