@@ -170,11 +170,17 @@ void configurarPWM(void){
 //FUNCIÓN PARA CONTADOR
 //----------------------------------------------------------------------------------------------------------------------4
 void Contador(void){
-  //si mi entrada es un + entonces mi contador aumenta una unidad
- if(Mensaje =="+"){
+  
+  if(Serial.available()>0){
+    
+    Mensaje = Serial.readStringUntil('\n');
+
     Serial.print("Recibi el siguiente mensaje: ");
     Serial.println(Mensaje);
-    Mensaje="";
+    }
+  //si mi entrada es un + entonces mi contador aumenta una unidad
+ if(Mensaje =="+"){
+    
     if (contador<255){
       contador++;
     }
@@ -186,12 +192,11 @@ void Contador(void){
     ledcWrite(LAChannel, contador); 
     Serial.print("Contador: ");
     Serial.print(contador);
+    Mensaje="";
  }
 //si mi entrada es un + entonces mi contador disminuye una unidad
  if (Mensaje == "-"){
-    Serial.print("Recibi el siguiente mensaje: ");
-    Serial.println(Mensaje);
-    Mensaje=""; 
+    
     if (contador>0){
       contador--;
     }
@@ -201,8 +206,8 @@ void Contador(void){
     }
     //ese mismo valor va al dutycicle del led
     ledcWrite(LAChannel, contador); 
-
     Serial.print("Contador: ");
     Serial.print(contador);
+    Mensaje=""; 
  }
 }

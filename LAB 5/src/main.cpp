@@ -134,8 +134,8 @@ void LectorVoltajes(void){
   V1 = analogReadMilliVolts(Voltaje1);
   V2 = analogReadMilliVolts(Voltaje2);
   
-  V1 = map(V1, 0,1023, 0, 255);
-  V2 = map(V2, 0, 1023, 0, 255); 
+  V1 = map(V1, 0,3300, 0, 255);
+  V2 = map(V2, 0, 3300, 0, 255); 
 
   ledcWrite(LRChannel, V1);
   ledcWrite(LVChannel, V2);
@@ -170,10 +170,17 @@ void configurarPWM(void){
 //FUNCIÓN PARA CONTADOR
 //----------------------------------------------------------------------------------------------------------------------4
 void Contador(void){
-  //si mi entrada es un + entonces mi contador aumenta una unidad
- if(Mensaje =="+"){
+  
+  if(Serial.available()>0){
+    
+    Mensaje = Serial.readStringUntil('\n');
+
     Serial.print("Recibi el siguiente mensaje: ");
     Serial.println(Mensaje);
+    }
+  //si mi entrada es un + entonces mi contador aumenta una unidad
+ if(Mensaje =="+"){
+    
     if (contador<255){
       contador++;
     }
@@ -185,11 +192,11 @@ void Contador(void){
     ledcWrite(LAChannel, contador); 
     Serial.print("Contador: ");
     Serial.print(contador);
+    Mensaje="";
  }
 //si mi entrada es un + entonces mi contador disminuye una unidad
  if (Mensaje == "-"){
-    Serial.print("Recibi el siguiente mensaje: ");
-    Serial.println(Mensaje);
+    
     if (contador>0){
       contador--;
     }
@@ -199,8 +206,8 @@ void Contador(void){
     }
     //ese mismo valor va al dutycicle del led
     ledcWrite(LAChannel, contador); 
-
     Serial.print("Contador: ");
     Serial.print(contador);
+    Mensaje=""; 
  }
 }
