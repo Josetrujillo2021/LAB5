@@ -134,8 +134,8 @@ void LectorVoltajes(void){
   V1 = analogReadMilliVolts(Voltaje1);
   V2 = analogReadMilliVolts(Voltaje2);
   
-  V1 = map(V1, 0,1023, 0, 255);
-  V2 = map(V2, 0, 1023, 0, 255); 
+  V1 = map(V1, 0,3300, 0, 255);
+  V2 = map(V2, 0, 3300, 0, 255); 
 
   ledcWrite(LRChannel, V1);
   ledcWrite(LVChannel, V2);
@@ -174,6 +174,7 @@ void Contador(void){
  if(Mensaje =="+"){
     Serial.print("Recibi el siguiente mensaje: ");
     Serial.println(Mensaje);
+    Mensaje="";
     if (contador<255){
       contador++;
     }
@@ -190,6 +191,7 @@ void Contador(void){
  if (Mensaje == "-"){
     Serial.print("Recibi el siguiente mensaje: ");
     Serial.println(Mensaje);
+    Mensaje=""; 
     if (contador>0){
       contador--;
     }
