@@ -105,28 +105,25 @@ void loop() {
 
   if (millis() - LastTime >= sampleTime1){
     LCD.clear(); //limpia la LCD
-    LCD.print("Rojo:"); //IMPRIMER EN LA LCD
+    LCD.print("Rojo"); //IMPRIMER EN LA LCD
     LCD.print(" "); 
 
-    LCD.print("Verde:");
+    LCD.print("Verde");
     LCD.print(" ");
 
-    LCD.print("Azul:");
+    LCD.print("Azul");
     LCD.setCursor(1, 1);
     
     LCD.print(V1);
-    LCD.print(" ");
+    LCD.print("   ");
 
     LCD.print(V2);
-    LCD.print(" ");
+    LCD.print("  ");
 
     LCD.print(contador);
     LastTime= millis(); 
   } 
-
-
-
-  }
+ }
 //---------------------------------------------------------------------------------------------------------------------
 //Lector analogico de voltajes
 //---------------------------------------------------------------------------------------------------------------------
@@ -182,7 +179,7 @@ void Contador(void){
  if(Mensaje =="+"){
     
     if (contador<255){
-      contador++;
+      contador = contador+15;
     }
 
     else if (contador>=255){
@@ -198,7 +195,7 @@ void Contador(void){
  if (Mensaje == "-"){
     
     if (contador>0){
-      contador--;
+      contador = contador-15;
     }
 
     else if (contador<=0){
