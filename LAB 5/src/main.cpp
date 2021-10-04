@@ -169,9 +169,10 @@ void configurarPWM(void){
 //FUNCIÓN PARA CONTADOR
 //----------------------------------------------------------------------------------------------------------------------4
 void Contador(void){
-  
+  //el if permite ver si hay mensaje en el monito (>0) o no (<=0)
   if(Serial.available()>0){
     
+    //LEE el mensaje hasta el primer ENTER
     Mensaje = Serial.readStringUntil('\n');
 
     Serial.print("Recibi el siguiente mensaje: ");
