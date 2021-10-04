@@ -130,7 +130,9 @@ void loop() {
 void LectorVoltajes(void){
   V1 = analogReadMilliVolts(Voltaje1);
   V2 = analogReadMilliVolts(Voltaje2);
-  
+  //Esta función de map me permite hacer una conversión de valores, donde los primeros dos son mi mínimo y máximo de entrada
+  //y mis ultimos 2 son el mínimo y máximo que quiero genrar. por lo que los primeros 2 hacen referencia a 0mV y  3300mV
+  //y los ultimos dos a un contador de 8 bits
   V1 = map(V1, 0,3300, 0, 255);
   V2 = map(V2, 0, 3300, 0, 255); 
 
